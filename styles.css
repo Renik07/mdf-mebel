@@ -1555,3 +1555,44 @@ body {
         opacity: 1;
     }
 }
+
+/* Mobile Scroll Fix for Portfolio */
+@media (max-width: 768px) {
+    .portfolio {
+        overflow: hidden;
+    }
+
+    .portfolio__track {
+        display: flex;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scroll-snap-type: x mandatory;
+        padding: 0 var(--container-padding) 40px;
+        gap: 20px;
+        /* Hide scrollbar */
+        scrollbar-width: none;
+        /* Firefox */
+        -ms-overflow-style: none;
+        /* IE and Edge */
+    }
+
+    .portfolio__track::-webkit-scrollbar {
+        display: none;
+        /* Chrome, Safari, Opera */
+    }
+
+    .project-card {
+        flex: 0 0 85vw;
+        /* Show most of the card and a peek of the next one */
+        scroll-snap-align: center;
+    }
+
+    .project-card__image-wrap {
+        height: 50vh;
+    }
+
+    .portfolio__nav {
+        display: none;
+        /* Hide "Scroll right" indicator on mobile as swipe is intuitive */
+    }
+}

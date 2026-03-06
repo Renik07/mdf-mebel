@@ -113,8 +113,6 @@ const portfolioTrack = document.querySelector('.portfolio__track');
 
 if (portfolioTrack) {
     function getScrollDistance() {
-        // Get all cards and measure the actual distance from first card's left edge
-        // to last card's right edge, then subtract the viewport width.
         const cards = portfolioTrack.querySelectorAll('.project-card');
         if (cards.length === 0) return 0;
 
@@ -123,18 +121,17 @@ if (portfolioTrack) {
         const trackRect = portfolioTrack.getBoundingClientRect();
         const lastCardRect = lastCard.getBoundingClientRect();
 
-        // Total content width = distance from track start to last card's right edge
         const totalContentWidth = (lastCardRect.right - trackRect.left);
         const distance = totalContentWidth - window.innerWidth;
 
         return Math.max(0, distance);
     }
 
-    // Delay initialization to ensure layout is fully computed (Safari needs this)
-    window.addEventListener('load', () => {
-        // Force a reflow before measuring
-        portfolioTrack.offsetHeight;
+    // Use gsap.matchMedia to handle responsive behavior
+    let mm = gsap.matchMedia();
 
+    mm.add("(min-width: 769px)", () => {
+        // Deskstop logic: GSAP horizontal scroll
         const distance = getScrollDistance();
 
         if (distance > 0) {
@@ -151,7 +148,6 @@ if (portfolioTrack) {
                     invalidateOnRefresh: true,
                     anticipatePin: 1,
                     onRefresh: (self) => {
-                        // Recalculate on refresh (resize, orientation change)
                         const newDist = getScrollDistance();
                         self.end = self.start + newDist;
                     }
@@ -159,7 +155,14 @@ if (portfolioTrack) {
             });
         }
 
-        // Force ScrollTrigger to recalculate after a short delay (Safari layout fix)
+        return () => {
+            // Cleanup: reset transforms when leaving desktop
+            gsap.set(portfolioTrack, { x: 0 });
+        };
+    });
+
+    // Force ScrollTrigger refresh on load
+    window.addEventListener('load', () => {
         setTimeout(() => {
             ScrollTrigger.refresh();
         }, 500);
