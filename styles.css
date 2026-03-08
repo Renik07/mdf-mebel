@@ -575,6 +575,10 @@ body {
     width: 90%;
     border-radius: 6px;
     border: 1px solid rgba(197, 160, 89, 0.15);
+    /* Аппаратное ускорение для плавной анимации карточек (особенно на телефонах) */
+    will-change: transform, opacity;
+    transform: translateZ(0);
+    backface-visibility: hidden;
 }
 
 .solutions__label {
