@@ -23,6 +23,9 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 // Integrate Lenis with GSAP ScrollTrigger
 gsap.registerPlugin(ScrollTrigger);
 
+// Prevent layout thrashing on mobile when address bar hides/shows
+ScrollTrigger.config({ ignoreMobileResize: true });
+
 lenis.on('scroll', ScrollTrigger.update);
 
 gsap.ticker.add((time) => {
@@ -78,16 +81,25 @@ document.addEventListener("DOMContentLoaded", () => {
             }, "-=1.2");
     });
 
-    // Parallax Effect for Hero Image
-    gsap.to("[data-parallax]", {
-        yPercent: 15,
-        ease: "none",
-        scrollTrigger: {
-            trigger: ".hero",
-            start: "top top",
-            end: "bottom top",
-            scrub: true
-        }
+    // Parallax Effect for Hero Image with matchMedia for performance
+    let mm = gsap.matchMedia();
+
+    mm.add({
+        isDesktop: "(min-width: 769px)",
+        isMobile: "(max-width: 768px)"
+    }, (context) => {
+        let { isMobile } = context.conditions;
+
+        gsap.to("[data-parallax]", {
+            yPercent: isMobile ? 5 : 15,
+            ease: "none",
+            scrollTrigger: {
+                trigger: ".hero",
+                start: "top top",
+                end: "bottom top",
+                scrub: isMobile ? 0.5 : true
+            }
+        });
     });
 
 });
@@ -354,6 +366,98 @@ window.addEventListener('load', () => {
     });
 });
 
+// --- HPL Compact Section ---
+window.addEventListener('load', () => {
+    const hplSection = document.querySelector('.hpl-compact');
+    if (!hplSection) return;
+
+    const hplImg = hplSection.querySelector('.hpl-compact__img');
+    const hplVisual = hplSection.querySelector('.hpl-compact__visual');
+
+    gsap.set(hplVisual, {
+        scale: 0.8,
+        opacity: 0,
+        borderRadius: "40px"
+    });
+    gsap.set(hplImg, { scale: 1.4 });
+
+    gsap.to(hplVisual, {
+        scale: 1,
+        opacity: 1,
+        borderRadius: "8px",
+        duration: 1.2,
+        ease: "power3.out",
+        scrollTrigger: {
+            trigger: hplSection,
+            start: "top 75%",
+            toggleActions: "play none none reverse"
+        }
+    });
+
+    gsap.to(hplImg, {
+        scale: 1,
+        ease: "none",
+        scrollTrigger: {
+            trigger: hplSection,
+            start: "top 90%",
+            end: "bottom 20%",
+            scrub: 1
+        }
+    });
+
+    const titleEl = hplSection.querySelector('.hpl-compact__title');
+    const descEl = hplSection.querySelector('.hpl-compact__desc');
+    const features = gsap.utils.toArray('.hpl-compact__features li');
+
+    if (titleEl && typeof SplitType !== 'undefined') {
+        const split = new SplitType(titleEl, { types: 'words, chars' });
+        gsap.set(split.chars, { opacity: 0, y: 40, rotateX: -40 });
+
+        gsap.to(split.chars, {
+            opacity: 1,
+            y: 0,
+            rotateX: 0,
+            duration: 0.8,
+            stagger: 0.02,
+            ease: "power4.out",
+            scrollTrigger: {
+                trigger: titleEl,
+                start: "top 85%",
+                toggleActions: "play none none reverse"
+            }
+        });
+    }
+
+    if (descEl) {
+        gsap.from(descEl, {
+            opacity: 0,
+            y: 30,
+            duration: 1,
+            ease: "power3.out",
+            scrollTrigger: {
+                trigger: descEl,
+                start: "top 85%",
+                toggleActions: "play none none reverse"
+            }
+        });
+    }
+
+    if (features.length > 0) {
+        gsap.from(features, {
+            opacity: 0,
+            x: -20,
+            duration: 0.6,
+            stagger: 0.1,
+            ease: "power2.out",
+            scrollTrigger: {
+                trigger: '.hpl-compact__features',
+                start: "top 85%",
+                toggleActions: "play none none reverse"
+            }
+        });
+    }
+});
+
 // --- Services Section (Accordion) ---
 const accordions = document.querySelectorAll('.accordion__item');
 
@@ -477,5 +581,26 @@ document.addEventListener('DOMContentLoaded', () => {
     const yearElement = document.getElementById('current-year');
     if (yearElement) {
         yearElement.textContent = new Date().getFullYear();
+    }
+});
+
+// --- Cookie Banner ---
+document.addEventListener('DOMContentLoaded', () => {
+    const cookieBanner = document.getElementById('cookieBanner');
+    const acceptCookiesBtn = document.getElementById('acceptCookies');
+
+    if (cookieBanner && acceptCookiesBtn) {
+        // Check if user already accepted cookies
+        if (!localStorage.getItem('cookiesAccepted')) {
+            // Slight delay so it doesn't pop up instantly
+            setTimeout(() => {
+                cookieBanner.classList.add('show');
+            }, 2000);
+        }
+
+        acceptCookiesBtn.addEventListener('click', () => {
+            localStorage.setItem('cookiesAccepted', 'true');
+            cookieBanner.classList.remove('show');
+        });
     }
 });
