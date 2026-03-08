@@ -212,22 +212,19 @@ window.addEventListener('load', () => {
     const detailsImageWrap = detailsSection.querySelector('.details__image-wrap');
 
     // --- Dramatic Image Reveal ---
-    // The wrapper starts small, rotated, and with rounded corners
+    // The wrapper starts small
     gsap.set(detailsImageWrap, {
-        scale: 0.4,
+        scale: 0.8,
         opacity: 0.3,
-        borderRadius: "40px",
-        rotation: -3,
+        borderRadius: "8px"
     });
     // The inner image starts zoomed in for parallax counter-effect
-    gsap.set(detailsImg, { scale: 1.6 });
+    gsap.set(detailsImg, { scale: 1.3 });
 
-    // Wrapper: scale up, straighten, sharpen corners, fade in
+    // Wrapper: scale up and fade in only (hardware accelerated)
     gsap.to(detailsImageWrap, {
         scale: 1,
         opacity: 1,
-        borderRadius: "8px",
-        rotation: 0,
         ease: "none",
         scrollTrigger: {
             trigger: detailsSection,
@@ -377,14 +374,13 @@ window.addEventListener('load', () => {
     gsap.set(hplVisual, {
         scale: 0.8,
         opacity: 0,
-        borderRadius: "40px"
+        borderRadius: "8px"
     });
     gsap.set(hplImg, { scale: 1.4 });
 
     gsap.to(hplVisual, {
         scale: 1,
         opacity: 1,
-        borderRadius: "8px",
         duration: 1.2,
         ease: "power3.out",
         scrollTrigger: {
