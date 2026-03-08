@@ -105,18 +105,36 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // --- Philosophy Section (Text Scrub) ---
-const scrubText = new SplitType('#scrub-text', { types: 'words' });
+let mmPhilosophy = gsap.matchMedia();
 
-gsap.to(scrubText.words, {
-    backgroundPositionX: '0%',
-    stagger: 0.1,
-    ease: "none",
-    scrollTrigger: {
-        trigger: '.philosophy',
-        start: 'top 50%',
-        end: 'bottom 70%',
-        scrub: 1,
-    }
+mmPhilosophy.add("(min-width: 769px)", () => {
+    const scrubText = new SplitType('#scrub-text', { types: 'words' });
+    gsap.to(scrubText.words, {
+        backgroundPositionX: '0%',
+        stagger: 0.1,
+        ease: "none",
+        scrollTrigger: {
+            trigger: '.philosophy',
+            start: 'top 50%',
+            end: 'bottom 70%',
+            scrub: 1,
+        }
+    });
+});
+
+mmPhilosophy.add("(max-width: 768px)", () => {
+    // Simple fade in for mobile without splitting text
+    gsap.from('#scrub-text', {
+        opacity: 0,
+        y: 30,
+        duration: 1,
+        ease: "power2.out",
+        scrollTrigger: {
+            trigger: '.philosophy',
+            start: 'top 70%',
+            toggleActions: "play none none reverse"
+        }
+    });
 });
 
 // --- Portfolio Section (Horizontal Scroll) ---
@@ -251,25 +269,40 @@ window.addEventListener('load', () => {
     const descEl = detailsSection.querySelector('.details__desc');
 
     if (titleEl && typeof SplitType !== 'undefined') {
-        const split = new SplitType(titleEl, { types: 'words, chars' });
+        if (window.innerWidth > 768) {
+            const split = new SplitType(titleEl, { types: 'words, chars' });
 
-        // Set initial hidden state
-        gsap.set(split.chars, { opacity: 0, y: 60, rotateZ: 8 });
+            // Set initial hidden state
+            gsap.set(split.chars, { opacity: 0, y: 60, rotateZ: 8 });
 
-        // Animate chars on scroll
-        gsap.to(split.chars, {
-            opacity: 1,
-            y: 0,
-            rotateZ: 0,
-            duration: 0.8,
-            stagger: 0.02,
-            ease: "power4.out",
-            scrollTrigger: {
-                trigger: titleEl,
-                start: "top 85%",
-                toggleActions: "play none none reverse"
-            }
-        });
+            // Animate chars on scroll
+            gsap.to(split.chars, {
+                opacity: 1,
+                y: 0,
+                rotateZ: 0,
+                duration: 0.8,
+                stagger: 0.02,
+                ease: "power4.out",
+                scrollTrigger: {
+                    trigger: titleEl,
+                    start: "top 85%",
+                    toggleActions: "play none none reverse"
+                }
+            });
+        } else {
+            // Simple fade in for mobile
+            gsap.from(titleEl, {
+                opacity: 0,
+                y: 30,
+                duration: 1,
+                ease: "power3.out",
+                scrollTrigger: {
+                    trigger: titleEl,
+                    start: "top 85%",
+                    toggleActions: "play none none reverse"
+                }
+            });
+        }
     }
 
     if (descEl) {
@@ -406,22 +439,37 @@ window.addEventListener('load', () => {
     const features = gsap.utils.toArray('.hpl-compact__features li');
 
     if (titleEl && typeof SplitType !== 'undefined') {
-        const split = new SplitType(titleEl, { types: 'words, chars' });
-        gsap.set(split.chars, { opacity: 0, y: 40, rotateX: -40 });
+        if (window.innerWidth > 768) {
+            const split = new SplitType(titleEl, { types: 'words, chars' });
+            gsap.set(split.chars, { opacity: 0, y: 40, rotateX: -40 });
 
-        gsap.to(split.chars, {
-            opacity: 1,
-            y: 0,
-            rotateX: 0,
-            duration: 0.8,
-            stagger: 0.02,
-            ease: "power4.out",
-            scrollTrigger: {
-                trigger: titleEl,
-                start: "top 85%",
-                toggleActions: "play none none reverse"
-            }
-        });
+            gsap.to(split.chars, {
+                opacity: 1,
+                y: 0,
+                rotateX: 0,
+                duration: 0.8,
+                stagger: 0.02,
+                ease: "power4.out",
+                scrollTrigger: {
+                    trigger: titleEl,
+                    start: "top 85%",
+                    toggleActions: "play none none reverse"
+                }
+            });
+        } else {
+            // Simple fade in for mobile
+            gsap.from(titleEl, {
+                opacity: 0,
+                y: 30,
+                duration: 1,
+                ease: "power3.out",
+                scrollTrigger: {
+                    trigger: titleEl,
+                    start: "top 85%",
+                    toggleActions: "play none none reverse"
+                }
+            });
+        }
     }
 
     if (descEl) {

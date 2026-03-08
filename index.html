@@ -159,7 +159,10 @@
 
         <section class="solutions" id="advantages">
             <div class="solutions__card">
-                <img src="images/solutions/solution-1.jpg" alt="Материалы и фурнитура" class="solutions__bg">
+                <picture>
+                    <source media="(max-width: 768px)" srcset="images/solutions/solution-mob-1.jpg">
+                    <img src="images/solutions/solution-1.jpg" alt="Материалы и фурнитура" class="solutions__bg">
+                </picture>
                 <div class="solutions__overlay">
                     <div class="solutions__label">
                         <span>Преимущества</span>
@@ -179,7 +182,11 @@
             </div>
 
             <div class="solutions__card">
-                <img src="images/solutions/solution-2.jpg" alt="Бесплатный замер и дизайн-проект" class="solutions__bg">
+                <picture>
+                    <source media="(max-width: 768px)" srcset="images/solutions/solution-mob-2.jpg">
+                    <img src="images/solutions/solution-2.jpg" alt="Бесплатный замер и дизайн-проект"
+                        class="solutions__bg">
+                </picture>
                 <div class="solutions__overlay">
                     <div class="solutions__label">
                         <span>Преимущества</span>
@@ -199,15 +206,19 @@
             </div>
 
             <div class="solutions__card">
-                <img src="images/solutions/solution-3.jpg" alt="Доступные цены и индивидуальный подход"
-                    class="solutions__bg">
+                <picture>
+                    <source media="(max-width: 768px)" srcset="images/solutions/solution-mob-3.jpg">
+                    <img src="images/solutions/solution-3.jpg" alt="Доступные цены и индивидуальный подход"
+                        class="solutions__bg">
+                </picture>
                 <div class="solutions__overlay">
                     <div class="solutions__label">
                         <span>Преимущества</span>
                         <span>3 / 3</span>
                     </div>
                     <h3 class="solutions__title">Доступные цены и<br>индивидуальный подход</h3>
-                    <p class="solutions__desc">Мы учитываем потребности и пожелания каждого клиента, а также стремимся
+                    <p class="solutions__desc">Мы учитываем потребности и пожелания каждого клиента, а также
+                        стремимся
                         предложить доступные цены.
                     </p>
                     <div class="solutions__tags">
@@ -551,24 +562,20 @@
         </section>
 
         <!-- Real Footer -->
-        <footer class="footer" style="padding-top: 20px;">
+        <footer class="footer">
             <div class="footer__container">
-                <div class="footer__bottom" style="border-top: none; padding-top: 0; align-items: flex-start;">
+                <div class="footer__bottom">
                     <div class="footer__legal">
                         <p>© <span id="current-year"></span> MDF MEBEL. Все права защищены.</p>
-                        <p style="margin-top: 10px; color: var(--color-text-muted); font-size: 13px; line-height: 1.5;">
+                        <p class="footer__merchant-info">
                             ИП Фамилия Имя Отчество<br>
                             ИНН: ХХХХХХХХХХХХ | ОГРНИП: ХХХХХХХХХХХХХХХ
                         </p>
                     </div>
-                    <div class="footer__links"
-                        style="display: flex; flex-direction: column; gap: 8px; text-align: right;">
+                    <div class="footer__links">
                         <a href="privacy.html" target="_blank">Политика конфиденциальности</a>
                         <a href="personal-data.html" target="_blank">Пользовательское соглашение</a>
-                        <a href="mailto:restspread@gmail.com" class="developer-link"
-                            style="color: var(--color-text-muted); text-decoration: none; transition: color 0.3s ease; margin-top: 8px;"
-                            onmouseover="this.style.color='#fff'"
-                            onmouseout="this.style.color='var(--color-text-muted)'">Разработка сайта: restspread</a>
+                        <a href="mailto:restspread@gmail.com" class="developer-link">Разработка сайта: restspread</a>
                     </div>
                 </div>
             </div>
