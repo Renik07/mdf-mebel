@@ -1,40 +1,50 @@
-// Lenis Smooth Scroll Setup
-const lenis = new Lenis({
-    duration: 1.2,
-    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-    orientation: 'vertical',
-    gestureOrientation: 'vertical',
-    smoothWheel: true,
-    wheelMultiplier: 1,
-    touchMultiplier: 2,
-})
+// --- Smooth Scroll (Lenis) - Desktop only for performance ---
+let lenis;
+if (window.innerWidth > 768) {
+    lenis = new Lenis({
+        duration: 1.2,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        orientation: 'vertical',
+        gestureOrientation: 'vertical',
+        smoothWheel: true,
+        wheelMultiplier: 1,
+        touchMultiplier: 2,
+    });
 
-// Handle Anchor Links with Lenis
+    // Integrate Lenis with GSAP ScrollTrigger
+    lenis.on('scroll', ScrollTrigger.update);
+
+    gsap.ticker.add((time) => {
+        lenis.raf(time * 1000);
+    });
+
+    gsap.ticker.lagSmoothing(0);
+}
+
+// Handle Anchor Links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
         e.preventDefault();
-        const target = this.getAttribute('href');
-        if (target && target !== '#') {
-            lenis.scrollTo(target);
+        const targetId = this.getAttribute('href');
+        const targetElement = document.querySelector(targetId);
+
+        if (targetElement) {
+            if (lenis) {
+                lenis.scrollTo(targetElement);
+            } else {
+                targetElement.scrollIntoView({ behavior: 'smooth' });
+            }
         }
     });
 });
 
-// Integrate Lenis with GSAP ScrollTrigger
+// --- ANIMATIONS --- //
+
+// Integrate ScrollTrigger
 gsap.registerPlugin(ScrollTrigger);
 
 // Prevent layout thrashing on mobile when address bar hides/shows
 ScrollTrigger.config({ ignoreMobileResize: true });
-
-lenis.on('scroll', ScrollTrigger.update);
-
-gsap.ticker.add((time) => {
-    lenis.raf(time * 1000);
-});
-
-gsap.ticker.lagSmoothing(0);
-
-// --- ANIMATIONS --- //
 
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -45,40 +55,55 @@ document.addEventListener("DOMContentLoaded", () => {
         header.classList.toggle('scrolled', window.scrollY > 50);
     });
 
-    // Splitting text for animation
-    const splitTypes = document.querySelectorAll('[text-split]');
+    // Splitting text for animation (Desktop only)
+    let mmIntro = gsap.matchMedia();
 
-    splitTypes.forEach((el) => {
-        const text = new SplitType(el, { types: 'words, chars' });
+    mmIntro.add("(min-width: 769px)", () => {
+        const splitTypes = document.querySelectorAll('[text-split]');
+        splitTypes.forEach((el) => {
+            const text = new SplitType(el, { types: 'words, chars' });
+            const tl = gsap.timeline();
 
-        const tl = gsap.timeline();
+            tl.from(text.words, {
+                y: 100,
+                opacity: 0,
+                rotationZ: 5,
+                duration: 1.2,
+                stagger: 0.05,
+                ease: "power4.out",
+                delay: 0.2
+            })
+                .to('.hero__subtitle', {
+                    y: 0,
+                    opacity: 1,
+                    duration: 1,
+                    ease: "power3.out"
+                }, "-=0.8")
+                .to('.hero__actions', {
+                    y: 0,
+                    opacity: 1,
+                    duration: 1,
+                    ease: "power3.out"
+                }, "-=0.8")
+                .to('.hero__visual', {
+                    opacity: 1,
+                    duration: 1.5,
+                    ease: "power2.out"
+                }, "-=1.2");
+        });
+    });
 
-        tl.from(text.words, {
-            y: 100,
-            opacity: 0,
-            rotationZ: 5,
-            duration: 1.2,
-            stagger: 0.05,
-            ease: "power4.out",
-            delay: 0.2
-        })
-            .to('.hero__subtitle', {
-                y: 0,
-                opacity: 1,
-                duration: 1,
-                ease: "power3.out"
-            }, "-=0.8")
-            .to('.hero__actions', {
-                y: 0,
-                opacity: 1,
-                duration: 1,
-                ease: "power3.out"
-            }, "-=0.8")
-            .to('.hero__visual', {
-                opacity: 1,
-                duration: 1.5,
-                ease: "power2.out"
-            }, "-=1.2");
+    mmIntro.add("(max-width: 768px)", () => {
+        // Simple reveal for mobile
+        gsap.set('.hero__subtitle, .hero__actions, .hero__visual', { opacity: 0, y: 20 });
+        gsap.to('.hero__subtitle, .hero__actions, .hero__visual', {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            stagger: 0.2,
+            ease: "power3.out",
+            delay: 0.5
+        });
     });
 
     // Parallax Effect for Hero Image with matchMedia for performance
@@ -248,7 +273,8 @@ window.addEventListener('load', () => {
             trigger: detailsSection,
             start: "top 90%",
             end: "top 10%",
-            scrub: 0.6,
+            scrub: window.innerWidth > 768 ? 0.6 : false,
+            toggleActions: window.innerWidth <= 768 ? "play none none reverse" : undefined
         }
     });
 
@@ -260,7 +286,8 @@ window.addEventListener('load', () => {
             trigger: detailsSection,
             start: "top 90%",
             end: "bottom 20%",
-            scrub: 0.6,
+            scrub: window.innerWidth > 768 ? 0.6 : false,
+            toggleActions: window.innerWidth <= 768 ? "play none none reverse" : undefined
         }
     });
 
@@ -430,7 +457,8 @@ window.addEventListener('load', () => {
             trigger: hplSection,
             start: "top 90%",
             end: "bottom 20%",
-            scrub: 1
+            scrub: window.innerWidth > 768 ? 1 : false,
+            toggleActions: window.innerWidth <= 768 ? "play none none reverse" : undefined
         }
     });
 
