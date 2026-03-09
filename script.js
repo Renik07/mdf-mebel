@@ -53,7 +53,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     window.addEventListener('scroll', () => {
         header.classList.toggle('scrolled', window.scrollY > 50);
-    });
+    }, { passive: true });
 
     // Splitting text for animation (Desktop only)
     let mmIntro = gsap.matchMedia();
@@ -106,23 +106,18 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // Parallax Effect for Hero Image with matchMedia for performance
+    // Parallax Effect for Hero Image — Desktop only (imperceptible on mobile, saves perf)
     let mm = gsap.matchMedia();
 
-    mm.add({
-        isDesktop: "(min-width: 769px)",
-        isMobile: "(max-width: 768px)"
-    }, (context) => {
-        let { isMobile } = context.conditions;
-
+    mm.add("(min-width: 769px)", () => {
         gsap.to("[data-parallax]", {
-            yPercent: isMobile ? 5 : 15,
+            yPercent: 15,
             ease: "none",
             scrollTrigger: {
                 trigger: ".hero",
                 start: "top top",
                 end: "bottom top",
-                scrub: isMobile ? 0.5 : true
+                scrub: true
             }
         });
     });
@@ -225,24 +220,29 @@ if (portfolioTrack) {
 }
 
 // --- Solutions Section (Stacking Sticky Cards) ---
-const solutionCards = gsap.utils.toArray('.solutions__card');
+// Desktop only: animate overlay entrance. Mobile: show immediately (no ScrollTrigger overhead)
+let mmSolutions = gsap.matchMedia();
 
-solutionCards.forEach((card) => {
-    const overlay = card.querySelector('.solutions__overlay');
+mmSolutions.add("(min-width: 769px)", () => {
+    const solutionCards = gsap.utils.toArray('.solutions__card');
 
-    if (overlay) {
-        gsap.from(overlay, {
-            y: 60,
-            opacity: 0,
-            duration: 1,
-            ease: "power2.out",
-            scrollTrigger: {
-                trigger: card,
-                start: "top 60%",
-                toggleActions: "play none none reverse"
-            }
-        });
-    }
+    solutionCards.forEach((card) => {
+        const overlay = card.querySelector('.solutions__overlay');
+
+        if (overlay) {
+            gsap.from(overlay, {
+                y: 60,
+                opacity: 0,
+                duration: 1,
+                ease: "power2.out",
+                scrollTrigger: {
+                    trigger: card,
+                    start: "top 60%",
+                    toggleActions: "play none none reverse"
+                }
+            });
+        }
+    });
 });
 
 // --- Details Section ---
@@ -624,27 +624,52 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// --- Promotional Banner Slider ---
+// --- Promotional Banner Slider with Intersection Observer for Performance ---
 document.addEventListener('DOMContentLoaded', () => {
+    const bannerSection = document.querySelector('.banner-section');
     const bannerSlides = document.querySelectorAll('.banner-slide');
     let currentBannerSlide = 0;
+    let bannerInterval;
 
     if (bannerSlides.length > 0) {
         bannerSlides[currentBannerSlide].classList.add('active');
 
-        setInterval(() => {
-            bannerSlides[currentBannerSlide].classList.remove('active');
-            bannerSlides[currentBannerSlide].classList.add('prev');
+        const startBannerSlider = () => {
+            if (bannerInterval) return;
+            bannerInterval = setInterval(() => {
+                bannerSlides[currentBannerSlide].classList.remove('active');
+                bannerSlides[currentBannerSlide].classList.add('prev');
 
-            // Reset styling quickly
-            setTimeout(() => {
-                const prevSlideIndex = (currentBannerSlide - 1 + bannerSlides.length) % bannerSlides.length;
-                bannerSlides[prevSlideIndex].classList.remove('prev');
-            }, 500);
+                // Reset styling quickly
+                setTimeout(() => {
+                    const prevSlideIndex = (currentBannerSlide - 1 + bannerSlides.length) % bannerSlides.length;
+                    bannerSlides[prevSlideIndex].classList.remove('prev');
+                }, 500);
 
-            currentBannerSlide = (currentBannerSlide + 1) % bannerSlides.length;
-            bannerSlides[currentBannerSlide].classList.add('active');
-        }, 4500);
+                currentBannerSlide = (currentBannerSlide + 1) % bannerSlides.length;
+                bannerSlides[currentBannerSlide].classList.add('active');
+            }, 4500);
+        };
+
+        const stopBannerSlider = () => {
+            clearInterval(bannerInterval);
+            bannerInterval = null;
+        };
+
+        // Pause animation when banner is not visible
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    startBannerSlider();
+                } else {
+                    stopBannerSlider();
+                }
+            });
+        }, { threshold: 0.1 });
+
+        if (bannerSection) {
+            observer.observe(bannerSection);
+        }
     }
 });
 
