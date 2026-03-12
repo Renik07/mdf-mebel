@@ -430,7 +430,6 @@ body {
     }
 
     .philosophy__text {
-        color: var(--color-gold);
         font-size: clamp(22px, 5vw, 32px);
     }
 }
@@ -1100,6 +1099,11 @@ body {
     align-items: center;
     cursor: pointer;
     transition: color 0.3s ease;
+    user-select: none;
+}
+
+.accordion__header:hover {
+    color: var(--color-gold);
 }
 
 .accordion__header h3 {
@@ -1117,7 +1121,7 @@ body {
 .accordion__content {
     max-height: 0;
     overflow: hidden;
-    transition: max-height 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+    transition: max-height 0.6s cubic-bezier(0.33, 1, 0.68, 1);
 }
 
 .accordion__content p {
@@ -2091,16 +2095,16 @@ body {
         margin-top: 60px;
         padding-top: 40px;
     }
-    
+
     .contact-socials__text {
         font-size: 16px;
         margin-bottom: 30px;
     }
-    
+
     .contact-socials__list {
         gap: 15px;
     }
-    
+
     .social-item {
         min-width: 90px;
         padding: 12px;
@@ -2238,13 +2242,16 @@ body {
     .category-page {
         padding-top: 120px;
     }
+
     .category-header {
         margin-bottom: 40px;
     }
+
     .category-grid {
         grid-template-columns: 1fr;
         gap: 30px;
     }
+
     .variant-card__image-wrap {
         aspect-ratio: 4/5;
     }

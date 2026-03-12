@@ -125,37 +125,22 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // --- Philosophy Section (Text Scrub) ---
-let mmPhilosophy = gsap.matchMedia();
-
-mmPhilosophy.add("(min-width: 769px)", () => {
+const philosophyTextEl = document.getElementById('scrub-text');
+if (philosophyTextEl) {
     const scrubText = new SplitType('#scrub-text', { types: 'words' });
+    
     gsap.to(scrubText.words, {
         backgroundPositionX: '0%',
         stagger: 0.1,
         ease: "none",
         scrollTrigger: {
             trigger: '.philosophy',
-            start: 'top 50%',
-            end: 'bottom 70%',
+            start: window.innerWidth > 768 ? 'top 50%' : 'top 75%',
+            end: window.innerWidth > 768 ? 'bottom 70%' : 'bottom 90%',
             scrub: 1,
         }
     });
-});
-
-mmPhilosophy.add("(max-width: 768px)", () => {
-    // Simple fade in for mobile without splitting text
-    gsap.from('#scrub-text', {
-        opacity: 0,
-        y: 30,
-        duration: 1,
-        ease: "power2.out",
-        scrollTrigger: {
-            trigger: '.philosophy',
-            start: 'top 70%',
-            toggleActions: "play none none reverse"
-        }
-    });
-});
+}
 
 // --- Portfolio Section (Horizontal Scroll) ---
 // Safari-safe: calculate distance from actual card elements instead of scrollWidth
@@ -531,37 +516,96 @@ window.addEventListener('load', () => {
 });
 
 // --- Services Section (Accordion) ---
+const servicesSection = document.querySelector('.services');
+const accordion = document.getElementById('services-accordion');
 const accordions = document.querySelectorAll('.accordion__item');
 
-accordions.forEach(acc => {
-    const header = acc.querySelector('.accordion__header');
+if (servicesSection && accordion && accordions.length > 0) {
+    // Function to open an item
+    const openItem = (item) => {
+        const content = item.querySelector('.accordion__content');
+        if (!content) return;
+        item.classList.add('active');
+        content.style.maxHeight = content.scrollHeight + 'px';
+    };
 
-    header.addEventListener('click', () => {
-        // Close others
-        accordions.forEach(otherAcc => {
-            if (otherAcc !== acc && otherAcc.classList.contains('active')) {
-                otherAcc.classList.remove('active');
-                otherAcc.querySelector('.accordion__content').style.maxHeight = null;
+    // Function to close an item
+    const closeItem = (item) => {
+        const content = item.querySelector('.accordion__content');
+        if (!content) return;
+        item.classList.remove('active');
+        content.style.maxHeight = null;
+    };
+
+    // Click behavior (available on all devices)
+    accordions.forEach(acc => {
+        const header = acc.querySelector('.accordion__header');
+        header.addEventListener('click', () => {
+            const isActive = acc.classList.contains('active');
+            
+            // Close others
+            accordions.forEach(otherAcc => {
+                if (otherAcc !== acc) closeItem(otherAcc);
+            });
+
+            // Toggle current if it's already active (close it), or open it
+            if (isActive) closeItem(acc);
+            else openItem(acc);
+        });
+    });
+
+    // Scroll behavior (Desktop only)
+    let mmAccordion = gsap.matchMedia();
+    mmAccordion.add("(min-width: 769px)", () => {
+        // Timeline that animations transition between items
+        const tl = gsap.timeline({
+            scrollTrigger: {
+                trigger: ".services",
+                start: "top 10%",
+                end: "+=200%", // Longer for more natural feel
+                pin: true,
+                scrub: 1,
+                // markers: true,
             }
         });
 
-        // Toggle current
-        acc.classList.toggle('active');
-        const content = acc.querySelector('.accordion__content');
+        // Initialize state
+        openItem(accordions[0]);
 
-        if (acc.classList.contains('active')) {
-            content.style.maxHeight = content.scrollHeight + 'px';
-        } else {
-            content.style.maxHeight = null;
-        }
+        // Sequential expansion logic
+        accordions.forEach((item, index) => {
+            if (index === 0) return;
+
+            tl.to({}, { 
+                duration: 1,
+                onStart: () => {
+                    accordions.forEach((acc, idx) => {
+                        if (idx === index) openItem(acc);
+                        else closeItem(acc);
+                    });
+                },
+                onReverseComplete: () => {
+                    accordions.forEach((acc, idx) => {
+                        if (idx === index - 1) openItem(acc);
+                        else closeItem(acc);
+                    });
+                }
+            }, "+=0.1"); // Add slight gap between items
+        });
+
+        tl.to({}, { duration: 0.5 }); // Final pause
+
+        return () => {
+            // Cleanup logic when screen becomes mobile
+            accordions.forEach(acc => closeItem(acc));
+            openItem(accordions[0]);
+        };
     });
-});
 
-// Open first accordion by default
-if (accordions.length > 0) {
-    accordions[0].classList.add('active');
-    const firstContent = accordions[0].querySelector('.accordion__content');
-    firstContent.style.maxHeight = firstContent.scrollHeight + 'px';
+    // Mobile/Initial set
+    if (window.innerWidth <= 768) {
+        openItem(accordions[0]);
+    }
 }
 
 // --- Form Handling ---
