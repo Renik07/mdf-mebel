@@ -624,6 +624,52 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+// --- Contact Socials Animation ---
+window.addEventListener('load', () => {
+    const socialBlock = document.querySelector('.contact-socials');
+    if (!socialBlock) return;
+
+    const socialItems = gsap.utils.toArray('.social-item');
+    const socialText = socialBlock.querySelector('.contact-socials__text');
+
+    if (socialText) {
+        gsap.set(socialText, { opacity: 0, y: 20 });
+        gsap.to(socialText, {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            ease: "power3.out",
+            scrollTrigger: {
+                trigger: socialBlock,
+                start: "top 85%",
+                toggleActions: "play none none reverse"
+            }
+        });
+    }
+
+    if (socialItems.length > 0) {
+        gsap.set(socialItems, {
+            opacity: 0,
+            y: 30,
+            scale: 0.9
+        });
+
+        gsap.to(socialItems, {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            duration: 0.8,
+            stagger: 0.1,
+            ease: "back.out(1.7)",
+            scrollTrigger: {
+                trigger: ".contact-socials__list",
+                start: "top 90%",
+                toggleActions: "play none none reverse"
+            }
+        });
+    }
+});
+
 // --- Promotional Banner Slider with Intersection Observer for Performance ---
 document.addEventListener('DOMContentLoaded', () => {
     const bannerSection = document.querySelector('.banner-section');
@@ -698,6 +744,27 @@ document.addEventListener('DOMContentLoaded', () => {
         acceptCookiesBtn.addEventListener('click', () => {
             localStorage.setItem('cookiesAccepted', 'true');
             cookieBanner.classList.remove('show');
+        });
+    }
+});
+// --- Category Variants Animation ---
+window.addEventListener('load', () => {
+    const variantCards = gsap.utils.toArray('.variant-card');
+    if (variantCards.length > 0) {
+        // Set initial state via GSAP instead of CSS for robustness
+        gsap.set(variantCards, { opacity: 0, y: 30 });
+
+        gsap.to(variantCards, {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            stagger: 0.1,
+            ease: "power3.out",
+            scrollTrigger: {
+                trigger: ".category-grid",
+                start: "top 90%",
+                toggleActions: "play none none reverse"
+            }
         });
     }
 });
