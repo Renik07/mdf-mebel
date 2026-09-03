@@ -55,6 +55,9 @@ document.addEventListener("DOMContentLoaded", () => {
         header.classList.toggle('scrolled', window.scrollY > 50);
     }, { passive: true });
 
+    const hero = document.querySelector('.hero');
+    if (!hero) return;
+
     // Splitting text for animation (Desktop only)
     let mmIntro = gsap.matchMedia();
 
@@ -608,66 +611,6 @@ if (servicesSection && accordion && accordions.length > 0) {
     }
 }
 
-// --- Form Handling ---
-document.addEventListener('DOMContentLoaded', () => {
-    const contactForm = document.getElementById('contactForm');
-    if (contactForm) {
-        contactForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            const formMessages = document.getElementById('formMessages');
-            const submitBtn = document.getElementById('submitBtn');
-            const originalBtnText = submitBtn.textContent;
-
-            // Validate
-            const privacyCheckbox = contactForm.querySelector('input[name="privacy"]');
-            if (privacyCheckbox && !privacyCheckbox.checked) {
-                formMessages.textContent = 'Необходимо согласие на обработку персональных данных.';
-                formMessages.className = 'form-messages error';
-                formMessages.style.display = 'block';
-                return;
-            }
-
-            submitBtn.textContent = 'Отправка...';
-            submitBtn.disabled = true;
-            formMessages.style.display = 'block';
-
-            try {
-                const formData = new FormData(contactForm);
-                const response = await fetch(contactForm.action, {
-                    method: 'POST',
-                    body: formData
-                });
-
-                const resultText = await response.text();
-
-                if (response.ok) {
-                    formMessages.textContent = 'Заявка успешно отправлена! Мы свяжемся с вами в ближайшее время.';
-                    formMessages.className = 'form-messages success';
-                    contactForm.reset();
-                } else {
-                    formMessages.textContent = resultText || 'Произошла ошибка при отправке. Пожалуйста, попробуйте позже.';
-                    formMessages.className = 'form-messages error';
-                }
-            } catch (error) {
-                formMessages.textContent = 'Произошла ошибка при отправке. Проверьте подключение к интернету.';
-                formMessages.className = 'form-messages error';
-            } finally {
-                submitBtn.textContent = originalBtnText;
-                submitBtn.disabled = false;
-
-                // Clear message after 5 seconds if success
-                if (formMessages.className.includes('success')) {
-                    setTimeout(() => {
-                        formMessages.style.display = 'none';
-                        formMessages.className = 'form-messages';
-                    }, 5000);
-                }
-            }
-        });
-    }
-});
-
 // --- Contact Socials Animation ---
 window.addEventListener('load', () => {
     const socialBlock = document.querySelector('.contact-socials');
@@ -711,55 +654,6 @@ window.addEventListener('load', () => {
                 toggleActions: "play none none reverse"
             }
         });
-    }
-});
-
-// --- Promotional Banner Slider with Intersection Observer for Performance ---
-document.addEventListener('DOMContentLoaded', () => {
-    const bannerSection = document.querySelector('.banner-section');
-    const bannerSlides = document.querySelectorAll('.banner-slide');
-    let currentBannerSlide = 0;
-    let bannerInterval;
-
-    if (bannerSlides.length > 0) {
-        bannerSlides[currentBannerSlide].classList.add('active');
-
-        const startBannerSlider = () => {
-            if (bannerInterval) return;
-            bannerInterval = setInterval(() => {
-                bannerSlides[currentBannerSlide].classList.remove('active');
-                bannerSlides[currentBannerSlide].classList.add('prev');
-
-                // Reset styling quickly
-                setTimeout(() => {
-                    const prevSlideIndex = (currentBannerSlide - 1 + bannerSlides.length) % bannerSlides.length;
-                    bannerSlides[prevSlideIndex].classList.remove('prev');
-                }, 500);
-
-                currentBannerSlide = (currentBannerSlide + 1) % bannerSlides.length;
-                bannerSlides[currentBannerSlide].classList.add('active');
-            }, 4500);
-        };
-
-        const stopBannerSlider = () => {
-            clearInterval(bannerInterval);
-            bannerInterval = null;
-        };
-
-        // Pause animation when banner is not visible
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    startBannerSlider();
-                } else {
-                    stopBannerSlider();
-                }
-            });
-        }, { threshold: 0.1 });
-
-        if (bannerSection) {
-            observer.observe(bannerSection);
-        }
     }
 });
 

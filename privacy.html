@@ -5,12 +5,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Политика конфиденциальности - MDF MEBEL</title>
+    <meta name="description" content="Политика конфиденциальности и обработки данных посетителей сайта MDF MEBEL.">
+    <meta name="robots" content="noindex, follow">
+    <link rel="canonical" href="https://mdfmebel.com/privacy.html">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="manifest" href="/site.webmanifest">
+    <meta name="theme-color" content="#52624f">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
         href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?v=20260901-light">
     <style>
         .policy-page {
             padding: 80px var(--container-padding);
@@ -163,6 +169,19 @@
             </div>
         </div>
     </div>
+    <footer class="footer">
+        <div class="footer__container">
+            <div class="footer__bottom">
+                <div class="footer__legal">
+                    <p>© <span id="current-year"></span> MDF MEBEL. Все права защищены.</p>
+                </div>
+                <div class="footer__links">
+                    <a href="mailto:restspread@gmail.com" class="developer-link">Разработка сайта: restspread</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>document.getElementById('current-year').textContent = new Date().getFullYear();</script>
 </body>
 
 </html>

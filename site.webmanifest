@@ -1,0 +1,17 @@
+{
+  "name": "MDF MEBEL",
+  "short_name": "MDF MEBEL",
+  "description": "Мебель на заказ в Москве и Московской области",
+  "lang": "ru-RU",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f6f4ef",
+  "theme_color": "#52624f",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
