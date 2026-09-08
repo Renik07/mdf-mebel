@@ -1,3 +1,11 @@
+@font-face {
+    font-family: 'Manrope';
+    src: url('assets/fonts/manrope-variable.ttf') format('truetype');
+    font-style: normal;
+    font-weight: 200 800;
+    font-display: swap;
+}
+
 :root {
     /* Colors */
     --color-graphite: #ece9e2;
@@ -11,7 +19,7 @@
 
     /* Typography */
     --font-primary: 'Playfair Display', serif;
-    --font-secondary: 'Montserrat', sans-serif;
+    --font-secondary: 'Manrope', sans-serif;
 
     /* Spacing */
     --container-padding: 5%;
@@ -2104,3 +2112,11 @@ body {
         min-width: 0;
     }
 }
+
+/* Hero: slow alternating pans within the existing image container. */
+.hero-slideshow { position: absolute; inset: 0; overflow: hidden; }
+.hero-slide { position: absolute; left: -5%; top: 0; width: 110%; height: 100%; object-fit: cover; opacity: 0; }
+.hero-slide:first-child { opacity: 1; }
+@media (prefers-reduced-motion: reduce) { .hero-slide { transform: none !important; } }
+.hero__title { font-size: clamp(40px, 4.3vw, 66px); }
+@media (max-width: 600px) { .hero__title { font-size: clamp(32px, 8.4vw, 48px); } }

@@ -1,0 +1,25 @@
+{
+  "tool": "built-in image_gen",
+  "images": [
+    {
+      "name": "kitchen",
+      "prompt": "Use case: photorealistic-natural. Asset type: furniture website hero slideshow. Generate ONE square high-resolution photorealistic architectural interior image. Contemporary architectural kitchen, muted olive matte full-height cabinetry, natural light oak island with pale stone worktop, integrated appliances, soft morning daylight, precise joinery, quiet refined European apartment. Focus on custom cabinetry and furniture. Eye-level 35mm architectural photography, straight verticals, believable construction and rich tactile surfaces, editorial quality. Full bleed, generous room context at both lateral edges for slow horizontal crop movement. No people, no lettering, no logos, no watermark, no collage. Not a website mockup."
+    },
+    {
+      "name": "living",
+      "prompt": "Use case: photorealistic-natural. Asset type: furniture website hero slideshow. Generate ONE square high-resolution photorealistic architectural interior image. Mid-century modern living room, beautiful custom walnut media cabinetry and built-in bookshelves, warm cream sofa, sculptural low wooden table, restrained rust accent armchair, afternoon light, realistic residential proportions. Focus on custom cabinetry and furniture. Eye-level 35mm architectural photography, straight verticals, believable construction and rich tactile surfaces, editorial quality. Full bleed, generous room context at both lateral edges for slow horizontal crop movement. No people, no lettering, no logos, no watermark, no collage. Not a website mockup."
+    },
+    {
+      "name": "bedroom",
+      "prompt": "Use case: photorealistic-natural. Asset type: furniture website hero slideshow. Generate ONE square high-resolution photorealistic architectural interior image. Soft modern neoclassical bedroom, bespoke off-white paneled wardrobes with slender bronze handles, muted blue upholstered bed, oak bedside cabinetry, restrained ceiling cornice, diffuse cool morning window light. Focus on custom cabinetry and furniture. Eye-level 35mm architectural photography, straight verticals, believable construction and rich tactile surfaces, editorial quality. Full bleed, generous room context at both lateral edges for slow horizontal crop movement. No people, no lettering, no logos, no watermark, no collage. Not a website mockup."
+    },
+    {
+      "name": "wardrobe",
+      "prompt": "Use case: photorealistic-natural. Asset type: furniture website hero slideshow. Generate ONE square high-resolution photorealistic architectural interior image. Japandi walk-in dressing room, bespoke light ash wood floor-to-ceiling wardrobes, linen textured sliding fronts mixed with open storage, carefully organized hanging clothes, subtle warm shelf lighting, serene natural daylight. Focus on custom cabinetry and furniture. Eye-level 35mm architectural photography, straight verticals, believable construction and rich tactile surfaces, editorial quality. Full bleed, generous room context at both lateral edges for slow horizontal crop movement. No people, no lettering, no logos, no watermark, no collage. Not a website mockup."
+    },
+    {
+      "name": "children",
+      "prompt": "Use case: photorealistic-natural. Asset type: furniture website hero slideshow. Generate ONE square high-resolution photorealistic architectural interior image. Scandinavian child's bedroom, beautifully crafted birch and dusty sage built-in storage and long study desk by window, low bed, a few books and wooden toys, soft daylight, refined playful but uncluttered interior. Focus on custom cabinetry and furniture. Eye-level 35mm architectural photography, straight verticals, believable construction and rich tactile surfaces, editorial quality. Full bleed, generous room context at both lateral edges for slow horizontal crop movement. No people, no lettering, no logos, no watermark, no collage. Not a website mockup."
+    }
+  ]
+}
